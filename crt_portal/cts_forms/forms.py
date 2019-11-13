@@ -127,8 +127,6 @@ class ProtectedClassForm(ModelForm):
     def __init__(self, *args, **kwargs):
         ModelForm.__init__(self, *args, **kwargs)
         choices = retrieve_or_create_choices()
-        self.fields['protected_class'].queryset = ProtectedClass.objects.filter(pk__in=choices).order_by('-form_order')
-        choices = retrieve_or_create_choices()
         self.fields['protected_class'] = ModelMultipleChoiceField(
             error_messages={'required': 'Please make a selection to continue. If none of these apply to your situation, please select "Other reason" and explain.'},
             required=True,
