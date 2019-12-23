@@ -186,6 +186,32 @@ class SectionAssignmentTests(TestCase):
         test_report.save()
         self.assertTrue(test_report.assign_section() == 'IER')
 
+    def test_ELS(self):
+        SAMPLE_REPORT['primary_complaint'] = 'workplace'
+        private = {
+            'public_or_private_employer': 'private_employer'
+        }
+        private.update(SAMPLE_REPORT)
+        test_report_private = Report.objects.create(**private)
+
+        public_more_than_15 = {
+            'public_or_private_employer': 'public_employer',
+            'employer_size': '15_or_more'
+        }
+        public_more_than_15.update(SAMPLE_REPORT)
+        test_report_public_15 = Report.objects.create(**public_more_than_15)
+
+        public_14 = {
+            'public_or_private_employer': 'public_employer',
+            'employer_size': '14_or_less',
+        }
+        public_14.update(SAMPLE_REPORT)
+        test_report_public_14 = Report.objects.create(**public_14)
+
+        self.assertTrue(test_report_private.assign_section() == 'ELS')
+        self.assertTrue(test_report_public_15.assign_section() == 'ELS')
+        self.assertFalse(test_report_public_14.assign_section() == 'ELS')
+
 
 class Valid_CRT_Pagnation_Tests(TestCase):
     def setUp(self):
