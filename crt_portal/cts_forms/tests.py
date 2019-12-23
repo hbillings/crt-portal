@@ -94,8 +94,6 @@ class Valid_Form_Tests(TestCase):
 
 class Valid_CRT_view_Tests(TestCase):
     def setUp(self):
-        for choice in PROTECTED_CLASS_CHOICES:
-            ProtectedClass.objects.get_or_create(protected_class=choice)
         test_report = Report.objects.create(**SAMPLE_REPORT)
         self.protected_example = ProtectedClass.objects.get(protected_class=PROTECTED_CLASS_CHOICES[0])
         test_report.protected_class.add(self.protected_example)
@@ -179,6 +177,14 @@ class SectionAssignmentTests(TestCase):
         test_report.save()
         self.assertFalse(test_report.assign_section() == 'VOT')
         self.assertTrue(test_report.assign_section() == 'ADM')
+
+    def test_IER(self):
+        SAMPLE_REPORT['primary_complaint'] = 'workplace'
+        immigration = ProtectedClass.objects.get_or_create(protected_class='Immigration/citizenship status (choosing this will not share your status)')
+        test_report = Report.objects.create(**SAMPLE_REPORT)
+        test_report.protected_class.add(immigration[0])
+        test_report.save()
+        self.assertTrue(test_report.assign_section() == 'IER')
 
 
 class Valid_CRT_Pagnation_Tests(TestCase):

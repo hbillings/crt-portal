@@ -114,4 +114,7 @@ class Report(models.Model):
         if self.primary_complaint == 'voting' and 'Disability (including temporary or recovery)' not in protected_classes:
             return 'VOT'
 
+        if self.primary_complaint == 'workplace' and ('Immigration/citizenship status (choosing this will not share your status)' in protected_classes):
+            return 'IER'
+
         return 'ADM'
