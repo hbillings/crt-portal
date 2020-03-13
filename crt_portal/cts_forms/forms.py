@@ -608,8 +608,7 @@ def date_cleaner(self, cleaned_data):
     except ValueError:
         # a bit of a catch-all for all the ways people could make bad dates
         self.add_error('last_incident_year', ValidationError(
-            _(f'Invalid date format {month}/{day}/{year}.'),
-            params={'value': f'{month}/{day}/{year}'},
+            _('Please enter a valid date format. Use format MM/DD/YYYY.'),
         ))
     except KeyError:
         # these will be caught by the built in error validation
